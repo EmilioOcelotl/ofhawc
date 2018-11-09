@@ -1,0 +1,4 @@
+ofxDomemaster
+ofxPostGlitch
+ofxOsc
+ofxXmlSettings
