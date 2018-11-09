@@ -1,4 +1,4 @@
 ofxDomemaster
-ofxPostGlitch
 ofxOsc
+ofxPostGlitch
 ofxXmlSettings
