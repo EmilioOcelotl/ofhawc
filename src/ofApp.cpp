@@ -16,6 +16,7 @@ void ofApp::setup(){
     // camera
     
     camera.setDistance(100);
+    camera.lookAt(nodos[0]);
     //camera.setPosition(0, 0, 0);
     
     // obj
@@ -108,12 +109,15 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-     camera.orbit(ofGetElapsedTimef()*2, ofGetElapsedTimef()*10, camera.getDistance(), ofVec3f(0, 0, 0));
+  camera.orbit(ofGetElapsedTimef()*2, ofGetElapsedTimef()*10, camera.getDistance(), ofVec3f(0, 0, 0));
     
-    while (reciever.hasWaitingMessages()){
-        ofxOscMessage m;
-        reciever.getNextMessage(&m);
+  while (reciever.hasWaitingMessages()){
+    ofxOscMessage m;
+    reciever.getNextMessage(&m); 
+    if (m.getAddress() == "/star" && m.getNumArgs() == 1){
+      camera.lookAt(nodos[m.getArgAsInt(0)]);
     }
+  }
 }
 
 //--------------------------------------------------------------
@@ -134,7 +138,7 @@ void ofApp::draw(){
     nodos[i].set(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]) );
     }
 
-    camera.lookAt(nodos[0]);
+    camera.lookAt(nodos[12]);
     string posicionX = " x = " + ofToString(columna[0][6]);
     string posicionY = " y = " + ofToString(columna[0][7]);
     string posicionZ = " z = " + ofToString(columna[0][8]);
