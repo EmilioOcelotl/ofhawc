@@ -17,8 +17,7 @@ void ofApp::setup(){
     // camera
     
     camera.setDistance(100);
-    
-    prueba = "2HWC J0534+220 l=184.546552486 b=-5.78316902994 RA=83.6279 Dec=22.0243";
+    prueba = "2HWC J0534+220 l=184.546552486 b=5.78316902994 RA=83.6279 Dec=22.0243";
     pruebaInt = 0;
     //camera.setPosition(0, 0, 0);
     
@@ -27,6 +26,7 @@ void ofApp::setup(){
     sphere.setRadius(200);
     //sphere.setResolution(20);
     mapa.load("maps/1.png");
+    typing = "ENTER para escribir o ENTER + h + ENTER para ayuda";
 
     // for para las fuentes
     
@@ -37,9 +37,9 @@ void ofApp::setup(){
     // csv
 
     buffer = ofBufferFromFile("csv/2HWC_modified-2.csv"); // reading into the buffer
-    curvaDeLuz1 =  ofBufferFromFile("dat/HAWC_fluxlc_Crab_2014-11-26_2016-06-02_1days_si2.63_co1000000_int1.00TeV_mintransits0.50.dat");
-    curvaDeLuz2 =  ofBufferFromFile("dat/HAWC_fluxlc_Mrk421_2014-11-26_2016-06-02_1days_si2.2_co5_int2.00TeV_mintransits0.50.dat");
-    curvaDeLuz3 =  ofBufferFromFile("dat/HAWC_fluxlc_Mrk501_2014-11-26_2016-06-02_1days_si1.6_co6_int3.00TeV_mintransits0.50.dat");
+    curvaDeLuz1 = ofBufferFromFile("csv/HAWC_fluxlc_Crab.csv"); // reading into the buffer
+    //curva2 = ofBufferFromFile("csv/"); // reading into the buffer
+    //curva3 = ofBufferFromFile("csv/"); // reading into the buffer
 
     // bools
     
@@ -48,7 +48,7 @@ void ofApp::setup(){
     
     // OSC
     
-    sender.setup("127.0.0.1", 5613);
+    sender.setup("192.168.1.67", 57120);
     reciever.setup(5612);
     
     // dome
@@ -58,13 +58,13 @@ void ofApp::setup(){
     
     // fonts
     
-    font.load("fonts/DejaVuSansMono.ttf", 16, true, true, true);
+    font.load("fonts/DejaVuSansMono.ttf", 12, true, true, true);
     //text = "hola esta es una prueba";
     //portOut = XML.getValue("PORT:NAME:OUT");
     
     // glitch
     
-    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA12, 8); // 32 es el modo hardcore
+    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA, 8);
     
     // lights
     
@@ -83,6 +83,15 @@ void ofApp::setup(){
     material.setShininess( 120 );
     material.setSpecularColor(ofColor(255, 255, 255, 255));
     
+    // radius = 180.f;
+    // center.set(ofGetWidth()*.5, ofGetHeight()*.5, 0);
+    
+    // sources
+    
+    //  for(int i = 0; i < LIM; i++){
+    //    sources[i].loadImage("img/"+ source + ".png");
+    //  }
+    
     // datos //
     
     // posiciones
@@ -95,20 +104,11 @@ void ofApp::setup(){
         nodos[i].set(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]) );
     }
     
-    // curvas de luz
+    // crab
     
-    std::vector < std::string > curva1 = ofSplitString(curvaDeLuz1.getText(), "    ");
-    std::vector < std::string > curva2 = ofSplitString(curvaDeLuz2.getText(), "    ");
-    std::vector < std::string > curva3 = ofSplitString(curvaDeLuz3.getText(), "    ");
-
-    // radius = 180.f;
-    // center.set(ofGetWidth()*.5, ofGetHeight()*.5, 0);
-    
-    // sources
-    
-    //  for(int i = 0; i < LIM; i++){
-    //    sources[i].loadImage("img/"+ source + ".png");
-    //  }
+    //std::vector < std::string > crab= ofSplitString(curvaDeLuz1.getText(), ",");
+    std::vector < std::string > crab= ofSplitString(curvaDeLuz1.getText(), ",");
+    crabo = ofToString(crab[2]+" "+crab[12]);
     
 }
 
@@ -122,7 +122,7 @@ void ofApp::update(){
     reciever.getNextMessage(&m); 
     if (m.getAddress() == "/star" && m.getNumArgs() == 1){
       //camera.lookAt(nodos[m.getArgAsInt(0)]);
-        prueba = m.getArgAsString(0);
+        pruebaInt = m.getArgAsInt(0);
         int paso2 = m.getArgAsInt(0) * 3;
         string fuenteNombre = ofToString(filas[paso2+1]) + " " + ofToString(filas[paso2+2]); // +3 para imprimir los valores de las fuentes. Empieza en 1, 0 es header.
         posicionX = fuenteNombre + " l=" + ofToString(columna[ofToInt(prueba)][1]);
@@ -131,6 +131,7 @@ void ofApp::update(){
         //posicionZ = " z = " + ofToString(columna[ofToInt(prueba)][8]);
     }
   }
+    
 }
 
 //--------------------------------------------------------------
@@ -144,6 +145,9 @@ void ofApp::draw(){
     
     // video //
     
+    // timer
+
+    
     ofSetRectMode(OF_RECTMODE_CENTER);
     
     ofEnableLighting();
@@ -151,7 +155,7 @@ void ofApp::draw(){
     //fDisableAlphaBlending();
     ofEnableDepthTest();
     ofTranslate(0, 0, 0);
-    camera.lookAt(nodos[ofToInt(prueba)]);
+    camera.lookAt(nodos[pruebaInt]);
     
     drawScene();
     
@@ -177,6 +181,7 @@ void ofApp::drawScene(){
         fuentes[i].setPosition(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]));
         ofSetColor(255,255, 255);
         fuentes[i].draw();
+        
     }
     
     material.end();
@@ -186,8 +191,8 @@ void ofApp::drawScene(){
     ofDisableDepthTest();
     
     ofSetColor(102, 255, 102);
-    font.drawString( "Nombre="+posicionX + posicionY + posicionZ + prueba, 20, 30);
-    font.drawString( "Seleccionar fuente", 20, 60);
+    font.drawString( "nombre="+posicionX + posicionY + posicionZ + prueba, 20, 20);
+    font.drawString( "consola> " + typing, 20, 40);
 
     ofNoFill();
     ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
@@ -197,13 +202,40 @@ void ofApp::drawScene(){
     ofSetColor(200, 200, 200);
     mapa.draw(ofGetWidth()/2-125, ofGetHeight()/2-110, 300, 225);
     ofSetColor(102, 255, 102);
-    font.drawString("Curvas de Luz", -ofGetWidth()/2+20, ofGetHeight()/4-40);
+    font.drawString("Curva de Luz", -ofGetWidth()/2+20, ofGetHeight()/4-30);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    
+    // if we didn't hit return, add the key to our string
+    if(key != OF_KEY_RETURN){
+        // some trickery: ignore the backspace key
+        if(key != OF_KEY_BACKSPACE){
+            typing += key;
+        }
+        else{
+            if(typing.size() > 0){
+                typing.erase(typing.end() - 1);
+            }
+        }
+    }
+    // hit Return, time to send the osc message if it's not empty
+    else{
+        std::vector < std::string > textAnalisis = ofSplitString(typing, " ");
+        if(textAnalisis[0] == "fuente"){
+            int mapps = ofToInt(textAnalisis[1]) + 1;
+            pruebaInt = ofToInt(textAnalisis[1]);
+            mapa.load("maps/"+ ofToString(mapps)+".png");
+            ofxOscMessage m;
+            m.setAddress("/curvaluz");
+            int numcrab = ofToInt(textAnalisis[1]);
+            m.addIntArg(numcrab);
+            sender.sendMessage(m, false);
+            
+        }
+        typing = "";
+    }
 }
 
 //--------------------------------------------------------------

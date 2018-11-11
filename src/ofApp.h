@@ -6,7 +6,8 @@
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
 
-#define LIM 39 // fuentes 
+#define LIM 39 // fuentes
+#define LIMCRAB 4248 // fuentes
 #define LIM2 3 
 
 class ofApp : public ofBaseApp{
@@ -81,7 +82,12 @@ public:
     std::vector < std::string > columna[LIM];
     std::vector < std::string > filas;
     ofVec3f nodos[LIM];
-    string prueba; 
+    string prueba;
+    //std::vector < std::string > curva2;
+    //std::vector < std::string > curva3;
+    string typing;
+    string crabo;
+    std::vector < std::string > crab;
     
     // bools
     
