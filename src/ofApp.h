@@ -40,8 +40,18 @@ public:
     ofMaterial material;
     ofxXmlSettings XML;
     ofBuffer buffer;
+    ofBuffer curvaDeLuz1;
+    ofBuffer curvaDeLuz2;
+    ofBuffer curvaDeLuz3;
     string columnas[LIM];
-    
+    int pruebaInt;
+    string posicionX;
+    string posicionY;
+    string posicionZ;
+    int fuentel;
+    int fuenteb;
+    ofImage mapa; 
+
     // string sources[LIM];
     
     // light
@@ -69,7 +79,9 @@ public:
     float posY[LIM];
     float posZ[LIM];
     std::vector < std::string > columna[LIM];
+    std::vector < std::string > filas;
     ofVec3f nodos[LIM];
+    string prueba; 
     
     // bools
     
