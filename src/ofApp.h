@@ -8,7 +8,9 @@
 
 #define LIM 39 // fuentes
 #define LIMCRAB 4248 // fuentes
-#define LIM2 3 
+#define LIM2 3
+#define SOURCENUM 39
+#define NUMFILES 3
 
 class ofApp : public ofBaseApp{
 public:
@@ -80,7 +82,7 @@ public:
     float posY[LIM];
     float posZ[LIM];
     std::vector < std::string > columna[LIM];
-    std::vector < std::string > filas;
+    std::vector < std::string > filas[LIM];
     ofVec3f nodos[LIM];
     string prueba;
     //std::vector < std::string > curva2;
@@ -114,5 +116,8 @@ public:
     bool blueinvert;
     bool redinvert;
     bool greeninvert;
+
+    ofBuffer curvaDeLuzBuffer[LIM2];
+    float intensidad;
     
 };
