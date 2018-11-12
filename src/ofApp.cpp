@@ -82,15 +82,6 @@ void ofApp::setup(){
     material.setShininess( 120 );
     material.setSpecularColor(ofColor(255, 255, 255, 255));
     
-    // radius = 180.f;
-    // center.set(ofGetWidth()*.5, ofGetHeight()*.5, 0);
-    
-    // sources
-    
-    //  for(int i = 0; i < LIM; i++){
-    //    sources[i].loadImage("img/"+ source + ".png");
-    //  }
-    
     // datos //
     
     // posiciones
@@ -102,6 +93,7 @@ void ofApp::setup(){
         columna[i] = ofSplitString(filas[paso], ",");
         nodos[i].set(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]) );
     }
+    
     //crabo = " " + curvasDeLuz[1][2] + curvasDeLuz[2][5] + curvasDeLuz[1][8];
 
 }
@@ -124,7 +116,7 @@ void ofApp::update(){
           mapa.load("maps/"+ofToString(m.getArgAsInt(0)+1)+".png");
           //posicionZ = " z = " + ofToString(columna[ofToInt(prueba)][8]);
       }
-      if (m.getAddress() == "/crabSend01" && m.getNumArgs() == 1){
+      if (m.getAddress() == "/crabSend" && m.getNumArgs() == 1){
           intensidad = m.getArgAsFloat(0);
       }
   }
