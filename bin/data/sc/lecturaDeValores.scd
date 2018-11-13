@@ -27,9 +27,6 @@ p.quant = 4;
 
 // fuentes como un continuo
 
-~crab = {Demand.kr(Impulse.kr(4), 0, Dseq(b.asInt, inf))};
-
-
 ~crab = {Demand.kr(Impulse.kr(4), 0, Dseq(b.asFloat*10000000, inf))};
 ~mkr421 = {Demand.kr(Impulse.kr(4), 0, Dseq(d.asFloat*10000000000, inf))};
 ~mkr501 = {Demand.kr(Impulse.kr(4), 0, Dseq(f.asFloat*10000000000, inf))};

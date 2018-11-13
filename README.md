@@ -2,7 +2,11 @@
 
 ## Introducción
 
-Visualizador basado en OpenFrameworks de los datos de posición y curvas de luz de fuentes observadas. Estos datos fueron recopilados por el Observatorio de Rayos Gamma HAWC (High-Altitude Water Cherenkov Gamma-Ray Observatory). El proyecto surge a propósito del Hackatón astronómico organizado en el Instituto de Atronomía. Este proyecto tiene un equivalente realizado en Processing. 
+Visualizador basado en OpenFrameworks de los datos de posición y curvas de luz de fuentes observadas. Estos datos fueron recopilados por el Observatorio de Rayos Gamma HAWC (High-Altitude Water Cherenkov Gamma-Ray Observatory). El proyecto surge a propósito del Hackatón astronómico organizado en el Instituto de Atronomía. Este repositorio es parte de un proyecto colaborativo que se complementa con [2HAWC](https://github.com/ciretorres/2HAWC) y [sc_hawc](https://github.com/marianneteixido/sc_hawc).
+
+## Colaboradorxs
+
+Marianne Teixido, Eric Torres, Rodrigo Treviño. 
 
 ## Descripción
 

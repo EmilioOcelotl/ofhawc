@@ -74,8 +74,6 @@ void ofApp::setup(){
     //colorLight2 = ofColor(clR[1], clG[1], clB[1]);
     //colorLight3 = ofColor(clR[2], clG[2], clB[2]);
     
-    
-    
     colorLight1 = ofColor(255.f, 113.f, 206.f);
     colorLight2 = ofColor( 1.f, 205.f, 254.f );
     colorLight3 = ofColor(185.f, 103.f, 255.f);
