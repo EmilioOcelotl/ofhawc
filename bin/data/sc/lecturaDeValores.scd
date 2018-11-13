@@ -1,20 +1,23 @@
 // crab
 
-x = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_fluxlc_Crab.csv", true, true).postcs;
-a = Array.fill(473, { arg i; x[i+1] });
-a.flatten;
+x = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_fluxlc_Crab_.csv", true, true).postcs;
+
+a = Array.fill(472, { arg i; x[i+1][0].split($ ) });
+b = Array.fill(472, { arg i; a[i][0] });
 
 // mrk421
 
-y = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_fluxlc_Mrk421.csv", true, true).postcs;
-b = Array.fill(472, { arg i; y[i+1] });
-b.flatten;
+y = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_fluxlc_Mrk421_.csv", true, true).postcs;
+
+c = Array.fill(471, { arg i; y[i+1][0].split($ ) });
+d = Array.fill(471, { arg i; c[i][0] });
 
 /// mrk501
 
-z = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_fluxlc_Mrk501.csv", true, true).postcs;
-c = Array.fill(480, { arg i; z[i+1] });
-c.flatten;
+z = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_fluxlc_Mrk501_.csv", true, true).postcs;
+
+e = Array.fill(479, { arg i; z[i+1][0].split($ ) });
+f = Array.fill(479, { arg i; e[i][0] });
 
 // proxy
 
@@ -24,9 +27,12 @@ p.quant = 4;
 
 // fuentes como un continuo
 
-~crab = {Demand.kr(Impulse.kr(4), 0, Dseq(b.flatten.asFloat*10000000000, inf))};
-~mkr421 = {Demand.kr(Impulse.kr(4), 0, Dseq(b.flatten.asFloat*10000000000, inf))};
-~mkr501 = {Demand.kr(Impulse.kr(4), 0, Dseq(b.flatten.asFloat*10000000000, inf))};
+~crab = {Demand.kr(Impulse.kr(4), 0, Dseq(b.asInt, inf))};
+
+
+~crab = {Demand.kr(Impulse.kr(4), 0, Dseq(b.asFloat*10000000, inf))};
+~mkr421 = {Demand.kr(Impulse.kr(4), 0, Dseq(d.asFloat*10000000000, inf))};
+~mkr501 = {Demand.kr(Impulse.kr(4), 0, Dseq(f.asFloat*10000000000, inf))};
 
 // replys que jalan el demand
 
@@ -40,7 +46,7 @@ p.quant = 4;
 
 OSCdef(\crabSend, {|msg|
 	var data = msg[3];
-	//msg[3].postln;
+	msg[3].postln;
 	Orb.n.sendMsg("/crabSend", data);
 }, '/crabSend');
 

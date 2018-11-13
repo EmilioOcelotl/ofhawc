@@ -62,6 +62,7 @@ public:
     ofLight pointLight;
     ofLight pointLight2;
     ofLight pointLight3;
+    
     ofColor colorLight1;
     ofColor colorLight2;
     ofColor colorLight3;
@@ -77,6 +78,8 @@ public:
     // obj
     
     ofSpherePrimitive sphere;
+    ofSpherePrimitive sphere2;
+
     ofSpherePrimitive fuentes[LIM];
     float posX[LIM];
     float posY[LIM];

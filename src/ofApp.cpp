@@ -25,10 +25,12 @@ void ofApp::setup(){
     // obj
     
     sphere.setRadius(200);
-    //sphere.setResolution(20);
+    sphere.setResolution(30);
+    sphere2.setRadius(100);
+    sphere2.setResolution(15);
     mapa.load("maps/1.png");
     typing = "ENTER para escribir o ENTER + h + ENTER para ayuda";
-    intensidad = 255;
+    intensidad = 0.06;
 
     // for para las fuentes
     
@@ -50,11 +52,6 @@ void ofApp::setup(){
     sender.setup("192.168.1.67", 57120);
     reciever.setup(5612);
     
-    // dome
-    
-    domemaster.setup();
-    domemaster.setCameraPosition(0,0,10);
-    
     // fonts
     
     font.load("fonts/DejaVuSansMono.ttf", 12, true, true, true);
@@ -63,23 +60,36 @@ void ofApp::setup(){
     
     // glitch
     
-    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA, 8);
+    //fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA, 8);
     
     // lights
     
     for(int i = 0; i < LIM2; i++){
-        clR[i] = 255;
-        clG[i] = 255;
-        clB[i] = 255;
+        clR[i] = 255*0.5;
+        clG[i] = 255*0.5;
+        clB[i] = 255*0.5;
     }
     
-    colorLight1 = ofColor(clR[0], clG[0], clB[0]);
-    colorLight2 = ofColor(clR[1], clG[1], clB[1]);
-    colorLight3 = ofColor(clR[2], clG[2], clB[2]);
+    //colorLight1 = ofColor(clR[0], clG[0], clB[0]);
+    //colorLight2 = ofColor(clR[1], clG[1], clB[1]);
+    //colorLight3 = ofColor(clR[2], clG[2], clB[2]);
+    
+    
+    
+    colorLight1 = ofColor(255.f, 113.f, 206.f);
+    colorLight2 = ofColor( 1.f, 205.f, 254.f );
+    colorLight3 = ofColor(185.f, 103.f, 255.f);
+    
+     pointLight.setDiffuseColor( colorLight1 );
+    pointLight.setSpecularColor( colorLight1 );
+    pointLight2.setDiffuseColor( colorLight2 );
+    pointLight2.setSpecularColor( colorLight2 );
+    pointLight3.setDiffuseColor( colorLight3 );
+    pointLight3.setSpecularColor( colorLight3 );
     
     ofSetSmoothLighting(true);
     
-    material.setShininess( 120 );
+    material.setShininess( 20 );
     material.setSpecularColor(ofColor(255, 255, 255, 255));
     
     // datos //
@@ -101,7 +111,16 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-  camera.orbit(ofGetElapsedTimef()*12, ofGetElapsedTimef()*10, camera.getDistance(), ofVec3f(0, 0, 0));
+    pointLight.setPosition(ofToFloat(columna[0][6]), ofToFloat(columna[0][7]), ofToFloat(columna[0][8]));
+    pointLight2.setPosition(ofToFloat(columna[6][6]), ofToFloat(columna[6][7]), ofToFloat(columna[6][8]));
+    pointLight3.setPosition(ofToFloat(columna[8][6]), ofToFloat(columna[8][7]), ofToFloat(columna[8][8]));
+
+    //pointLight.setPosition((ofGetWidth()*.5)+ cos(ofGetElapsedTimef()*.5)*(ofGetWidth()*.3), ofGetHeight()/2, 500);
+
+    //pointLight2.setPosition();
+    //pointLight3.setPosition();
+    
+  camera.orbit(ofGetElapsedTimef()*2, ofGetElapsedTimef()*10, camera.getDistance(), ofVec3f(0, 0, 0));
     
   while (reciever.hasWaitingMessages()){
     ofxOscMessage m;
@@ -117,6 +136,12 @@ void ofApp::update(){
           //posicionZ = " z = " + ofToString(columna[ofToInt(prueba)][8]);
       }
       if (m.getAddress() == "/crabSend" && m.getNumArgs() == 1){
+          intensidad = m.getArgAsFloat(0);
+      }
+      if (m.getAddress() == "/mkr421Send" && m.getNumArgs() == 1){
+          intensidad = m.getArgAsFloat(0);
+      }
+      if (m.getAddress() == "/mkr501Send" && m.getNumArgs() == 1){
           intensidad = m.getArgAsFloat(0);
       }
   }
@@ -135,7 +160,7 @@ void ofApp::draw(){
     // video //
 
     ofSetRectMode(OF_RECTMODE_CENTER);
-    ofEnableLighting();
+   // ofEnableLighting();
     //ofEnableArbTex();
     //fDisableAlphaBlending();
     ofEnableDepthTest();
@@ -152,23 +177,71 @@ void ofApp::drawScene(){
     camera.begin();
     ofSetColor(255);
     //ofSetColor(102, 255, 102);
-    sphere.drawWireframe();
     ofEnableLighting();
+    //pointLight.draw();
+    //pointLight2.draw();
+    //pointLight3.draw();
     pointLight.enable();
-    //pointLight2.enable();
-    //pointLight3.enable();
+    pointLight2.enable();
+    pointLight3.enable();
+    glLineWidth(1);
+
     //material.begin();
-    
+
     for (int i = 0;i < 39;i++){
-        int paso = 1;
         fuentes[i].setPosition(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]));
-        float intensilocal = ofMap(intensidad, 0, 0.06, 0, 255);
-        ofSetColor(intensilocal, intensilocal, intensilocal);
+        ofSetColor(255);
+        //float intensilocal = ofMap(intensidad, 0, 0.06, 0, 255);
+        //ofSetColor(intensilocal, intensilocal, intensilocal);
+        //scale = scale*0.9 + newScale*0.1; // para smoothear?
         //fuentes[i].setRadius(valorFuente);
         fuentes[i].draw();
+        ofSetColor(255.f, 113.f, 206.f, 180);
+        fuentes[8].draw();
+        ofSetColor( 1.f, 205.f, 254.f, 180 );
+        fuentes[6].draw();
+        ofSetColor(185.f, 103.f, 255.f, 180);
+        fuentes[0].draw();
     }
     
-    //material.end();
+    float intensilocal = ofMap(intensidad, 0.0, 0.04, 0.0, 1.0);
+    
+    colorLight1 = ofColor(255.f*intensilocal, 113.f*intensilocal, 206.f*intensilocal );
+    colorLight2 = ofColor( 1.f*intensilocal, 205.f*intensilocal, 254.f*intensilocal );
+    colorLight3 = ofColor(185.f*intensilocal, 103.f*intensilocal, 255.f*intensilocal );
+    
+    pointLight.setDiffuseColor( colorLight1 );
+    pointLight.setSpecularColor( colorLight1 );
+    pointLight2.setDiffuseColor( colorLight2 );
+    pointLight2.setSpecularColor( colorLight2 );
+    pointLight3.setDiffuseColor( colorLight3 );
+    pointLight3.setSpecularColor( colorLight3 );
+
+    ofFill();
+    
+    ofSetColor(255, 255, 255);
+    
+    for (int i = 0;i < 500;i++){
+        ofPushMatrix();
+        ofRotateZ(ofGetElapsedTimef()+10);
+        
+        ofTranslate((ofNoise(i/2.4)-0.5)*1600,
+                    (ofNoise(i/5.6)-0.5)*1600,
+                    (ofNoise(i/8.2)-0.5)*1600);
+        
+        ofSphere(0, 0, (ofNoise(i/3.4)-0.1)*1);
+        ofPopMatrix();
+    }
+
+    ofSetColor(255, 255, 255);
+
+    sphere.drawWireframe();
+    
+    material.begin();
+    sphere2.drawWireframe();
+    material.end();
+    
+   // material.end();
     camera.end();
     
     ofDisableLighting();
@@ -182,7 +255,6 @@ void ofApp::drawScene(){
 
     ofNoFill();
     ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
-    glLineWidth(0.1);
     ofDrawLine(-ofGetWidth()/64, 0, ofGetWidth()/64,0);
     ofDrawLine(0, -ofGetWidth()/64, 0, ofGetWidth()/64);
     //ofSetColor(200, 200, 200);

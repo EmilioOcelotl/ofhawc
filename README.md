@@ -15,19 +15,33 @@ Este proyecto se inspira parcialmente en Orbit, una plataforma para realizar Liv
 ## Conclusiones
 
 El modelo bidireccional de intercambio de información nos permite aprovechar las posibilidades de OpenFrameworks y SuperCollider. Por un lado, encontramos cómodo trabajar las estructuras fijas de datos en OpenFrameworks, mientras que los datos secuenciados en un continuo de tiempo son más fáciles de manipular en SuperCollider. 
+
 El trabajo con múltiples plataformas (OF, SC, P) nos permitió conducir de manera colectiva la comprensión y la realización del objetivo final. 
+
 El uso de técnica de Live Coding permite manipular los datos en vivo. Gracias a esto es posible tener una experiencia performática de aproximación a los datos del HAWC. 
 
 ## Trabajo pendiente
 
 Shaders sincronizados
+
 Representaciones tridimensionales de las fuentes. 
+
 Búsqueda del vecino más cercano para determinar las relaciones en el espacio de las fuentes. 
+
 Integración con los otros equipos del hackatón astronómico. 
 
 ## Referencias
 
 [The High-Altitude Water Cherenkov Gamma-Ray Observatory](https://www.hawc-observatory.org/)
-[Hackatón Astronómico ACT. Live Coding y sonorización de datos astronómicos ](http://artecienciaytecnologias.mx/es/programacion/divulgacion/5121748WQHs766EB9yOj0146)
+
+[ (The (Temporary|Transnational|Terrestrial|Transdimensional) Organisation for the (Promotion|Proliferation|Permanence|Purity) of Live (Algorithm|Audio|Art|Artistic) Programming)](https://toplap.org/about/)
+
 [Just In Time programming library](http://doc.sccode.org/Overviews/JITLib.html)
+
+[Live Coding en México. Hernani Villaseñor](http://www.hernanivillasenor.com/archivos/html/livecoding.html)
+
+[Hackatón Astronómico ACT. Live Coding y sonorización de datos astronómicos ](http://artecienciaytecnologias.mx/es/programacion/divulgacion/5121748WQHs766EB9yOj0146)
+
 [Orbit](https://github.com/EmilioOcelotl/Orbit)
+
+[PiranhaLab](https://github.com/EmilioOcelotl/PiranhaLib)
