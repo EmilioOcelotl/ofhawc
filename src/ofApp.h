@@ -5,6 +5,7 @@
 #include "ofxPostGlitch.h"
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
+#include "ofxSyphon.h"
 
 #define LIM 39 // fuentes
 #define LIMCRAB 4248 // fuentes
@@ -53,7 +54,16 @@ public:
     string posicionZ;
     int fuentel;
     int fuenteb;
-    ofImage mapa; 
+    int ofmode;
+    ofImage mapa;
+    int orbitX;
+    int orbitY;
+    int fuenteObservada; 
+    
+#if (defined(__APPLE__) && defined(__MACH__))
+    ofxSyphonClient client;
+    bool syphonON;
+#endif
 
     // string sources[LIM];
     
@@ -79,6 +89,7 @@ public:
     
     ofSpherePrimitive sphere;
     ofSpherePrimitive sphere2;
+    ofSpherePrimitive sphere3;
 
     ofSpherePrimitive fuentes[LIM];
     float posX[LIM];
@@ -92,6 +103,7 @@ public:
     //std::vector < std::string > curva3;
     string typing;
     string crabo;
+    string post; 
     std::vector < std::string > crab;
     
     // bools
@@ -121,6 +133,9 @@ public:
     bool greeninvert;
 
     ofBuffer curvaDeLuzBuffer[LIM2];
-    float intensidad;
+    float intensidadCrab;
+    float intensidadMkr421;
+    float intensidadMkr501;
+    string fuenteNombre;
     
 };

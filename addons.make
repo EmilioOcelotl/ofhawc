@@ -1,4 +1,5 @@
 ofxDomemaster
 ofxOsc
 ofxPostGlitch
+ofxSyphon
 ofxXmlSettings
