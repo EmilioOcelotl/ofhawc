@@ -31,7 +31,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     void drawScene();
-    
+    void miniWin();
+
     ofxDomemaster domemaster;
     ofTrueTypeFont font;
     //ofTrueTypeFont fontobj[LIM];
@@ -78,12 +79,17 @@ public:
     ofColor colorLight3;
     float radius;
     ofVec3f center;
+    int centro; 
     
     // color
     
     int clR[LIM2];
     int clG[LIM2];
     int clB[LIM2];
+    
+    // blur
+    
+    int blur;
     
     // obj
     

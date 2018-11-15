@@ -36,14 +36,14 @@ void ofApp::setup(){
     //sphere.setResolution();
     sphere2.setRadius(20);
     sphere3.setRadius(100);
-    sphere3.setResolution(5);
+    //sphere3.setResolution(5);
     mapa.load("maps/1.png");
     typing = "";
     post = "ofhawc | h + ENTER para ayuda";
     intensidadCrab = 0.01241282988032;
     intensidadMkr421 = 0.01241282988032;
     intensidadMkr501 = 0.01241282988032;
-
+    
     // for para las fuentes
     
     for(int i = 0; i < LIM; i++){
@@ -125,10 +125,61 @@ void ofApp::setup(){
     
     //crabo = " " + curvasDeLuz[1][2] + curvasDeLuz[2][5] + curvasDeLuz[1][8];
     
+    //fbo mini ventana
+    
+    //fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA32F_ARB, 8);
+    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGB, 8);
+    
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
+    
+    blur = 0;
+    
+    myGlitch.setup(&fbo);
+
+    convergence = false;
+    glow = false;
+    shaker = false;
+    cutslider = false;
+    twist = false;
+    outline = false;
+    noise = false;
+    slitscan = false;
+    swell = false;
+    invert = false;
+    highcontrast = false;
+    blueraise = false;
+    redraise = false;
+    greenraise = false;
+    blueinvert = false;
+    redinvert = false;
+    greeninvert = false;
+    
+    centro = 0;
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
+    ofEnableAlphaBlending();
+    ofEnableArbTex();
+    //ofSetRectMode(OF_RECTMODE_CORNER);
+    
+    //camera.setPosition(0, 0, 0);
+    
+    // video //
+    
+    //ofSetRectMode(OF_RECTMODE_CENTER);
+    // ofEnableLighting();
+    //ofEnableArbTex();
+    //fDisableAlphaBlending();
+    //ofEnableDepthTest();
+    //lets draw some graphics into our two fbos
+    fbo.begin();
+    drawScene();
+    fbo.end();
     
     pointLight.setPosition(ofToFloat(columna[0][6]), ofToFloat(columna[0][7]), ofToFloat(columna[0][8]));
     pointLight2.setPosition(ofToFloat(columna[6][6]), ofToFloat(columna[6][7]), ofToFloat(columna[6][8]));
@@ -176,28 +227,110 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    ofEnableAlphaBlending();
-    ofEnableArbTex();
+    ofBackground(0, 0, 0);
+    
+    ofSetColor(255,255,255);
+    
+    myGlitch.setFx(OFXPOSTGLITCH_CONVERGENCE, convergence);
+    myGlitch.setFx(OFXPOSTGLITCH_GLOW, glow);
+    myGlitch.setFx(OFXPOSTGLITCH_SHAKER, shaker);
+    myGlitch.setFx(OFXPOSTGLITCH_CUTSLIDER, cutslider);
+    myGlitch.setFx(OFXPOSTGLITCH_TWIST, twist);
+    myGlitch.setFx(OFXPOSTGLITCH_OUTLINE, outline);
+    myGlitch.setFx(OFXPOSTGLITCH_NOISE, noise);
+    myGlitch.setFx(OFXPOSTGLITCH_SLITSCAN, slitscan);
+    myGlitch.setFx(OFXPOSTGLITCH_SWELL, swell);
+    myGlitch.setFx(OFXPOSTGLITCH_INVERT, invert);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_HIGHCONTRAST, highcontrast);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_BLUERAISE, blueraise);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_REDRAISE, redraise);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_GREENRAISE, greenraise);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_BLUEINVERT, blueinvert);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_REDINVERT, redinvert);
+    myGlitch.setFx(OFXPOSTGLITCH_CR_GREENINVERT, greeninvert);
+    
+    myGlitch.generateFx();
+
+    fbo.draw(0,-22);
+    
+    if(centro == 0 ){
+    camera.lookAt(nodos[fuenteObservada]);
+    }
+    
+    if(centro == 1){
+        ofVec3f centro;
+        centro.set(0, 0, 0);
+        camera.lookAt(centro);
+    }
+    //drawScene();
+    
+    ofTranslate(0, 0, 0);
+
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    ofSetColor(255);
+    //ofSetColor(102, 255, 102, 200);
+    ofScale(1, 1, 1);
+    font.drawString( "Posición de la fuente enfocada en coordenadas esféricas", 20, 30);
+    font.drawString( posicionX + posicionY + posicionZ + prueba, 50, 60);
+    font.drawString("Curvas de Luz", 20, 90);
+    font.drawString(" Crab   Mrk421  Mrk501"+crabo, 50, 180);
+    
+    font.drawString( "ofhawc> " + typing, 20, 210);
+    //font.drawString(post, 20, 240);
+    
+    ofNoFill();
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
+    ofDrawLine(-ofGetWidth()/64, 0, ofGetWidth()/64,0);
+    ofDrawLine(0, -ofGetWidth()/64, 0, ofGetWidth()/64);
+    ofSetColor(200, 200, 200);
+    ofSetRectMode(OF_RECTMODE_CORNER);
+    //mapa.draw(ofGetWidth()/2-120, ofGetHeight()/2-610, 300, 225);
+    mapa.draw(ofGetWidth()/2-275, -ofGetHeight()/2, 300, 225);
+    
+    //ofSetColor(102, 255, 102);
     ofSetRectMode(OF_RECTMODE_CORNER);
     
-    //camera.setPosition(0, 0, 0);
+    float radioCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+    float radioMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+    float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
     
-    // video //
-    
-    ofSetRectMode(OF_RECTMODE_CENTER);
-    // ofEnableLighting();
-    //ofEnableArbTex();
-    //fDisableAlphaBlending();
-    ofEnableDepthTest();
-    ofTranslate(0, 0, 0);
-    camera.lookAt(nodos[fuenteObservada]);
-    
-    drawScene();
+    ofFill();
+    ofSetColor(255.f, 113.f, 206.f);
+    ofCircle(-ofGetWidth()/2+85, -ofGetHeight()/2+130, radioCrab);
+    ofSetColor( 1.f, 205.f, 254.f);
+    ofCircle(-ofGetWidth()/2+175, -ofGetHeight()/2+130, radioMkr421);
+    ofSetColor(185.f, 103.f, 255.f);
+    ofCircle(-ofGetWidth()/2+265, -ofGetHeight()/2+130, radioMkr501);
+
     
 }
 
 //--------------------------------------------------------------
 void ofApp::drawScene(){
+    
+    
+    ofDisableArbTex();
+    ofEnableAlphaBlending();
+    
+    //ofTranslate(0, 50, 0);
+    
+    if(blur == 1){
+        ofDisableDepthTest();
+        ofFill();
+        ofSetColor(0,0,0, 100);
+        ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+        
+        //2 - Draw graphics
+        
+        ofNoFill();
+        ofSetColor(255,255,255);
+        
+    }
+    
+    if(blur == 0){
+        ofEnableDepthTest();
+        ofClear(0);
+    }
     
     if(ofmode == 1){
         
@@ -211,13 +344,21 @@ void ofApp::drawScene(){
         pointLight.enable();
         pointLight2.enable();
         pointLight3.enable();
-        glLineWidth(1);
+        glLineWidth(0.5);
+        
+        //ofSetColor(102, 255, 102, 55);
+        ofSetColor(255, 255);
+        sphere.drawWireframe();
         
         material.begin();
         
+        //ofSetColor(102, 255, 102, 200);
+        
+        //ofEnableDepthTest();
+        
         for (int i = 0;i < 39;i++){
             fuentes[i].setPosition(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]));
-            ofSetColor(255, 100);
+            //ofSetColor(255, 255);
             //float intensilocal = ofMap(intensidad, 0, 0.06, 0, 255);
             //ofSetColor(intensilocal, intensilocal, intensilocal);
             //scale = scale*0.9 + newScale*0.1; // para smoothear?
@@ -227,17 +368,17 @@ void ofApp::drawScene(){
             float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
             
             fuentes[i].draw();
-
+            
             fuentes[0].setRadius(radioCrab);
             fuentes[8].setRadius(radioMkr421);
             fuentes[6].setRadius(radioMkr501);
-
+            
         }
         
         float colorCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
         float colorMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
         float colorMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-
+        
         colorLight1 = ofColor(255.f*colorCrab, 113.f*colorCrab, 206.f*colorCrab );
         colorLight2 = ofColor( 1.f*colorMkr421, 205.f*colorMkr421, 254.f*colorMkr421 );
         colorLight3 = ofColor(185.f*colorMkr501, 103.f*colorMkr501, 255.f*colorMkr501 );
@@ -255,85 +396,66 @@ void ofApp::drawScene(){
         
         for (int i = 0;i < 500;i++){
             ofPushMatrix();
-            ofRotateZ(ofGetElapsedTimef()+10);
+            //ofRotateZ(ofGetElapsedTimef()+10);
             
-            ofTranslate((ofNoise(i/2.4)-0.5)*1600,
-                        (ofNoise(i/5.6)-0.5)*1600,
-                        (ofNoise(i/8.2)-0.5)*1600);
+            ofTranslate((ofNoise(i/2.4)-0.5)*600,
+                        (ofNoise(i/5.6)-0.5)*600,
+                        (ofNoise(i/8.2)-0.5)*600);
             
             ofSphere(0, 0, (ofNoise(i/3.4)-0.1)*0.5);
             ofPopMatrix();
         }
         
-        //ofSetColor(102, 255, 102, 200);
-        ofSetColor(255, 255, 255);
-        
-        //material.begin();
-        sphere3.drawWireframe();
+        //ofEnableDepthTest();
         sphere2.draw();
-        //material.end();
-
+        ofSetColor(255, 255, 255, 200);
+        sphere3.drawWireframe();
         material.end();
-        sphere.drawWireframe();
-
+        
         camera.end();
         
-        ofDisableLighting();
-        ofDisableDepthTest();
-        
     }
-    
-#if (defined(__APPLE__) && defined(__MACH__))
-
-    if(ofmode == 0){
-        ofSetRectMode(OF_RECTMODE_CORNER);
-
-        ofSetColor(255);
-        client.draw(0, 0);
-    };
-    
-#endif
     
     ofDisableLighting();
     ofDisableDepthTest();
     
     ofSetRectMode(OF_RECTMODE_CENTER);
-    ofSetColor(255, 100);
-    //ofSetColor(102, 255, 102, 200);
-    ofScale(1, 1, 1);
-    font.drawString( "Posición de la fuente enfocada en coordenadas esféricas", 20, 30);
-    font.drawString( posicionX + posicionY + posicionZ + prueba, 50, 60);
-    font.drawString("Curvas de Luz", 20, 90);
-    font.drawString(" Crab   Mrk421  Mrk501"+crabo, 50, 180);
+    ofTranslate(0, ofGetHeight()/2+70);
     
-    font.drawString( "ofhawc> " + typing, 20, 210);
-    //font.drawString(post, 20, 240);
+    if(ofmode == 1){
+        miniWin();
+    };
     
-    ofNoFill();
-    ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
-    ofDrawLine(-ofGetWidth()/64, 0, ofGetWidth()/64,0);
-    ofDrawLine(0, -ofGetWidth()/64, 0, ofGetWidth()/64);
-    ofSetColor(255, 255, 255, 100);
-    //ofSetRectMode(OF_RECTMODE_CORNER);
-    //mapa.draw(ofGetWidth()/2-120, ofGetHeight()/2-610, 300, 225);
-    mapa.draw(ofGetWidth()/2-125, ofGetHeight()/2-110, 300, 225);
+    // esto tiene que ir al frente
+    
+#if (defined(__APPLE__) && defined(__MACH__))
+    
+    if(ofmode == 0){
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        ofSetColor(255);
+        ofTranslate(0, 0);
+        client.draw(0, 0);
+        ofTranslate(0, 0, 0);
+        
+        ofSetRectMode(OF_RECTMODE_CENTER);
+    };
+    
+#endif
+    
+    
+    
+}
 
-    //ofSetColor(102, 255, 102);
-    ofSetRectMode(OF_RECTMODE_CORNER);
-    
-    float radioCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-    float radioMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-    float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-    
-    ofFill();
-    ofSetColor(255.f, 113.f, 206.f);
-    ofCircle(-ofGetWidth()/2+85, -ofGetHeight()/2+130, radioCrab);
-    ofSetColor( 1.f, 205.f, 254.f);
-    ofCircle(-ofGetWidth()/2+175, -ofGetHeight()/2+130, radioMkr421);
-    ofSetColor(185.f, 103.f, 255.f);
-    ofCircle(-ofGetWidth()/2+265, -ofGetHeight()/2+130, radioMkr501);
-    //ofSetRectMode(OF_RECTMODE_CORNER);
-    //ofTranslate(ofGetWidth()/2, -ofGetHeight());
+
+//--------------------------------------------------------------
+void ofApp::miniWin(){ // pendiente dibujar la otra miniwin
+ 
+    if(ofmode == 1){
+        ofScale(0.5, 0.5, 0.5);
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        ofSetColor(255);
+        client.draw(0, 0);
+    };
 
 }
 
@@ -356,11 +478,13 @@ void ofApp::keyPressed(int key){
         std::vector < std::string > textAnalisis = ofSplitString(typing, " ");
         
         if(textAnalisis[0] == "fuente" && ofToInt(textAnalisis[1]) < 39){
+            centro = 0;
             int mapps = ofToInt(textAnalisis[1]) + 1;
             mapa.load("maps/"+ ofToString(mapps)+".png");
             pruebaInt = ofToInt(textAnalisis[1]);
             prueba = ofToString(textAnalisis[1]);
             int paso2 = ofToInt(textAnalisis[1]) * 3;
+            fuenteObservada = ofToInt(textAnalisis[1]);
             //fuenteNombre = ofToString(filas[1]) + " " + ofToString(filas[2]); // +3 para imprimir los valores de las fuentes. Empieza en 1, 0 es header.
             posicionX = "Nombre="+fuenteNombre + " l=" + ofToString(columna[ofToInt(prueba)][1]);
             posicionY = " b=" + ofToString(columna[ofToInt(prueba)][2]) + " RA=" + ofToString(columna[ofToInt(prueba)][3]) + " Dec=" + ofToString(columna[ofToInt(prueba)][4]);
@@ -379,6 +503,65 @@ void ofApp::keyPressed(int key){
         if(textAnalisis[0] == "orbit"){
             orbitX = ofToInt(textAnalisis[1]);
             orbitY = ofToInt(textAnalisis[2]);
+        }
+        
+        if(textAnalisis[0] == "centro"){
+            centro = 1;
+        }
+        
+        if (textAnalisis[0] == "glitch"){
+            if(ofToInt(textAnalisis[1]) == 0 && ofToInt(textAnalisis[2]) == 0){
+                convergence = false;
+                glow = false;
+                shaker = false;
+                cutslider = false;
+                twist = false;
+                outline = false;
+                noise = false;
+                slitscan = false;
+                swell = false;
+                invert = false;
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 1){
+                convergence = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 2){
+                glow = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 3){
+                shaker = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 4){
+                cutslider = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 5){
+                twist = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 6){
+                outline = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 7){
+                noise = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 8){
+                slitscan = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 9){
+                swell = ofToBool(textAnalisis[1]);
+            }
+            
+            if(ofToInt(textAnalisis[2]) == 10){
+                invert = ofToBool(textAnalisis[1]);
+            }
         }
         
         typing = "";

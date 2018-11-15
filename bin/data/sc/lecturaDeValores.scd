@@ -37,25 +37,27 @@ z = CSVFileReader.read(thisProcess.nowExecutingPath.dirname +/+"../csv/HAWC_flux
 e = Array.fill(479, { arg i; z[i+1][0].split($ ) });
 f = Array.fill(479, { arg i; e[i][0] });
 
-h = f.sort
+//h = f.sort
 //h[478] // chico
 //h[0] // grande
 //h[478].asFloat*100000000000 // chico 0.0011980022099968
 //h[0].asFloat*100000000000 // grande -0.001229125466112
 
-// proxy
-
-Orb.start("192.168.1.111", 12000); // la dirección de la otra compu. Se necesita la librería PiranhaLab
-Orb.start("127.0.0.1", 5612); // la dirección de la otra compu. Se necesita la librería PiranhaLab
+// proxy JITLib just in time library
 
 p = ProxySpace.push(s.boot);
 p.quant = 4;
+s.meter;
 
-// fuentes como un continuo
+// fuentes como un continuo ar kr
 
 ~crab = {Demand.kr(Impulse.kr(8), 0, Dseq(b.asFloat*100000000000, inf))};
 ~mrk421 = {Demand.kr(Impulse.kr(8), 0, Dseq(d.asFloat*100000000000, inf))};
 ~mrk501 = {Demand.kr(Impulse.kr(8), 0, Dseq(f.asFloat*100000000000, inf))};
+
+~crab = {Lag.kr(Demand.kr(Impulse.kr(8), 0, Dseq(b.asFloat*100000000000, inf)), 0.5)};
+~mrk421 = {Lag.kr(Demand.kr(Impulse.kr(8), 0, Dseq(d.asFloat*100000000000, inf)), 0.5)};
+~mrk501 = {Lag.kr(Demand.kr(Impulse.kr(8), 0, Dseq(f.asFloat*100000000000, inf)), 0.5)};
 
 // replys que jalan el demand
 
@@ -64,6 +66,10 @@ p.quant = 4;
 ~mrk501Send = {SendReply.kr(Impulse.kr(30), '/mrk501Send', ~mrk501.kr)};
 
 // oscdef
+
+Orb.start("192.168.1.111", 12000); // la dirección de la otra compu. Se necesita la librería PiranhaLab
+Orb.start("127.0.0.1", 5612);
+Orb.start("127.0.0.1", 12000);
 
 (
 
@@ -96,15 +102,19 @@ OSCdef(\mrk501Send).free; /// para pararlo
 
 ~dema = {Demand.kr(Impulse.kr(4), 0, Dseq(b.asFloat*10000000000, inf))};
 ~deca = {Decay.kr(Demand.kr(Impulse.kr(4), 0, Dseq(b.asFloat*10000000000, inf)) * Impulse.kr(4), 0.3)};
-~crab = {Pan2.ar(SinOsc.ar(LinLin.kr(~dema, 0, 1, 100, 1000), 0, ~deca)) * 10};
+~crab = {Pan4.ar(SinOsc.ar(LinLin.kr(~dema, 0, 1, 100, 1000), 0, ~deca)) * 10};
+
 ~dema2 = {Demand.kr(Impulse.kr(6), 0, Dseq(b.asFloat*10000000000, inf))};
 ~deca2 = {Decay.kr(Demand.kr(Impulse.kr(6), 0, Dseq(b.asFloat*10000000000, inf)) * Impulse.kr(6), 0.3)};
-~crab2 = {Pan2.ar(SinOsc.ar(LinLin.kr(~dema2, 0, 1, 100, 5000), 0, ~deca2)) * 10};
+~crab2 = {Pan4.ar(SinOsc.ar(LinLin.kr(~dema2, 0, 1, 100, 5000), 0, ~deca2)) * 10};
+
 ~dema3 = {Demand.kr(Impulse.kr(2), 0, Dseq(b.asFloat*10000000000, inf))};
 ~deca3 = {Decay.kr(Demand.kr(Impulse.kr(2), 0, Dseq(b.asFloat*10000000000, inf)) * Impulse.kr(2), 0.3)};
-~crab3 = {Pan2.ar(SinOsc.ar(LinLin.kr(~dema3, 0, 1, 100, 10000), 0, ~deca3)) * 10};
+~crab3 = {Pan4.ar(SinOsc.ar(LinLin.kr(~dema3, 0, 1, 100, 10000), 0, ~deca3)) * 10};
 
-~sin2.play;
-~sin3.play;
-~sin.play;
+~crab.play;
+~crab2.play;
+~crab3.play;
+
+SinOsc.ar * [0.5, 0.2, 0.5, 0.2]
 
