@@ -19,7 +19,7 @@ void ofApp::setup(){
     // camera
     
     camera.setDistance(100);
-    prueba = "2HWC J0534+220 l=184.546552486 b=-5.78316902994 RA=83.6279 Dec=22.0243";
+    prueba = "ofhawc posición y curvas de luz";
     //prueba = "0";
     pruebaInt = 0;
     fuenteObservada = 0;
@@ -75,7 +75,7 @@ void ofApp::setup(){
     
     // fonts
     
-    font.load("fonts/DejaVuSansMono.ttf", 14, true, true, true);
+    font.load("fonts/DejaVuSansMono.ttf", 12, true, true, true);
     //text = "hola esta es una prueba";
     //portOut = XML.getValue("PORT:NAME:OUT");
     
@@ -156,7 +156,7 @@ void ofApp::setup(){
     redinvert = false;
     greeninvert = false;
     
-    centro = 0;
+    centro = 1;
     
 }
 
@@ -220,6 +220,109 @@ void ofApp::update(){
             ofmode = m.getArgAsInt(0);
         }
 #endif
+
+        if (m.getAddress() == "/message"  &&  m.getNumArgs() == 2){
+            string oldpost = "SuperCollider> " + m.getArgAsString(0);
+            post = oldpost + "\n" + post;
+
+        }
+        
+        if (m.getAddress() == "/cglitch" && m.getNumArgs() == 2){
+            if(m.getArgAsInt(1) == 0 && m.getArgAsInt(0) == 0){
+                highcontrast = false;
+                blueraise = false;
+                redraise = false;
+                greenraise = false;
+                blueinvert = false;
+                redinvert = false;
+                greeninvert = false;
+            }
+            
+            if(m.getArgAsInt(1) == 1){
+                highcontrast = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 2){
+                blueraise = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 3){
+                redraise = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 4){
+                greenraise = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 5){
+                blueinvert = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 6){
+                redinvert = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 1){
+                greeninvert = m.getArgAsBool(0);
+            }
+        }
+        
+        if (m.getAddress() == "/glitch" && m.getNumArgs() == 2){
+            
+            if(m.getArgAsInt(1) == 0 && m.getArgAsInt(0) == 0){
+                convergence = false;
+                glow = false;
+                shaker = false;
+                cutslider = false;
+                twist = false;
+                outline = false;
+                noise = false;
+                slitscan = false;
+                swell = false;
+                invert = false;
+                
+            }
+            
+            if(m.getArgAsInt(1) == 1){
+                convergence = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 2){
+                glow = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 3){
+                shaker = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 4){
+                cutslider = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 5){
+                twist = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 6){
+                outline = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 7){
+                noise = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 8){
+                slitscan = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 9){
+                swell = m.getArgAsBool(0);
+            }
+            
+            if(m.getArgAsInt(1) == 10){
+                invert = m.getArgAsBool(0);
+            }
+        }
     }
     
 }
@@ -251,7 +354,7 @@ void ofApp::draw(){
     
     myGlitch.generateFx();
 
-    fbo.draw(0,-22);
+    fbo.draw(0,-21);
     
     if(centro == 0 ){
     camera.lookAt(nodos[fuenteObservada]);
@@ -264,43 +367,57 @@ void ofApp::draw(){
     }
     //drawScene();
     
-    ofTranslate(0, 0, 0);
+    if(ofmode == 0){
+        ofSetColor(102, 255, 102, 200);
+        font.drawString( "ofhawc> " + typing, 20, 30);
 
-    ofSetRectMode(OF_RECTMODE_CORNER);
-    ofSetColor(255);
-    //ofSetColor(102, 255, 102, 200);
-    ofScale(1, 1, 1);
-    font.drawString( "Posición de la fuente enfocada en coordenadas esféricas", 20, 30);
-    font.drawString( posicionX + posicionY + posicionZ + prueba, 50, 60);
-    font.drawString("Curvas de Luz", 20, 90);
-    font.drawString(" Crab   Mrk421  Mrk501"+crabo, 50, 180);
+    }
     
-    font.drawString( "ofhawc> " + typing, 20, 210);
-    //font.drawString(post, 20, 240);
-    
+    if(ofmode == 1){
+        
+        ofTranslate(0, 0, 0);
+
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        ofSetColor(255);
+        ofSetColor(102, 255, 102, 200);
+        font.drawString( "ofhawc> " + typing, 20, 190);
+        font.drawString( "Posición de la fuente enfocada en coordenadas esféricas", 20, 30);
+        font.drawString( posicionX + posicionY + posicionZ + prueba, 70, 50);
+        font.drawString("Curvas de Luz", 20, 70);
+        font.drawString("  Crab   Mrk421   Mrk501"+crabo, 50, 160);
+        ofSetColor(255, 70);
+        font.drawString(post, 70, 210);
+        //font.drawString( "ofhawc> " + typing, 20, 210);
+        ofSetColor(255);
     ofNoFill();
+        
+        ofColor(255);
     ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
     ofDrawLine(-ofGetWidth()/64, 0, ofGetWidth()/64,0);
     ofDrawLine(0, -ofGetWidth()/64, 0, ofGetWidth()/64);
+        
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        
+        float radioCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+        float radioMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+        float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+        
+        ofFill();
+        ofSetColor(255.f, 113.f, 206.f);
+        ofCircle(-ofGetWidth()/2+85, -ofGetHeight()/2+110, radioCrab);
+        ofSetColor( 1.f, 205.f, 254.f);
+        ofCircle(-ofGetWidth()/2+175, -ofGetHeight()/2+110, radioMkr421);
+        ofSetColor(185.f, 103.f, 255.f);
+        ofCircle(-ofGetWidth()/2+265, -ofGetHeight()/2+110, radioMkr501);
+    }
+    
     ofSetColor(200, 200, 200);
     ofSetRectMode(OF_RECTMODE_CORNER);
-    //mapa.draw(ofGetWidth()/2-120, ofGetHeight()/2-610, 300, 225);
-    mapa.draw(ofGetWidth()/2-275, -ofGetHeight()/2, 300, 225);
+    //mapa.draw(ofGetWidth()/2, ofGetHeight()/2, 300, 225);
+    mapa.draw(ofGetWidth()/2-270, -ofGetHeight()/2, 300, 225);
     
     //ofSetColor(102, 255, 102);
-    ofSetRectMode(OF_RECTMODE_CORNER);
-    
-    float radioCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-    float radioMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-    float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-    
-    ofFill();
-    ofSetColor(255.f, 113.f, 206.f);
-    ofCircle(-ofGetWidth()/2+85, -ofGetHeight()/2+130, radioCrab);
-    ofSetColor( 1.f, 205.f, 254.f);
-    ofCircle(-ofGetWidth()/2+175, -ofGetHeight()/2+130, radioMkr421);
-    ofSetColor(185.f, 103.f, 255.f);
-    ofCircle(-ofGetWidth()/2+265, -ofGetHeight()/2+130, radioMkr501);
+
 
     
 }
@@ -308,16 +425,16 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::drawScene(){
     
-    
     ofDisableArbTex();
     ofEnableAlphaBlending();
     
     //ofTranslate(0, 50, 0);
-    
+    /*
     if(blur == 1){
         ofDisableDepthTest();
         ofFill();
         ofSetColor(0,0,0, 100);
+        ofTranslate(0, 0, 0);
         ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
         
         //2 - Draw graphics
@@ -325,7 +442,7 @@ void ofApp::drawScene(){
         ofNoFill();
         ofSetColor(255,255,255);
         
-    }
+    }*/
     
     if(blur == 0){
         ofEnableDepthTest();
@@ -333,7 +450,6 @@ void ofApp::drawScene(){
     }
     
     if(ofmode == 1){
-        
         camera.begin();
         ofSetColor(255);
         //ofSetColor(102, 255, 102);
@@ -411,7 +527,6 @@ void ofApp::drawScene(){
         ofSetColor(255, 255, 255, 200);
         sphere3.drawWireframe();
         material.end();
-        
         camera.end();
         
     }
@@ -420,9 +535,10 @@ void ofApp::drawScene(){
     ofDisableDepthTest();
     
     ofSetRectMode(OF_RECTMODE_CENTER);
-    ofTranslate(0, ofGetHeight()/2+70);
+    ofTranslate(ofGetWidth()-270, ofGetHeight()-260);
     
     if(ofmode == 1){
+        ofTranslate(-40, 90);
         miniWin();
     };
     
@@ -431,9 +547,9 @@ void ofApp::drawScene(){
 #if (defined(__APPLE__) && defined(__MACH__))
     
     if(ofmode == 0){
-        ofSetRectMode(OF_RECTMODE_CORNER);
+        ofSetRectMode(OF_RECTMODE_CENTER);
         ofSetColor(255);
-        ofTranslate(0, 0);
+        ofTranslate(-410, -100);
         client.draw(0, 0);
         ofTranslate(0, 0, 0);
         
@@ -441,9 +557,7 @@ void ofApp::drawScene(){
     };
     
 #endif
-    
-    
-    
+
 }
 
 
@@ -451,12 +565,89 @@ void ofApp::drawScene(){
 void ofApp::miniWin(){ // pendiente dibujar la otra miniwin
  
     if(ofmode == 1){
-        ofScale(0.5, 0.5, 0.5);
+        ofScale(0.3, 0.3, 0.3);
         ofSetRectMode(OF_RECTMODE_CORNER);
         ofSetColor(255);
         client.draw(0, 0);
     };
+    
+    if(ofmode == 0){
+        ofSetRectMode(OF_RECTMODE_CENTER);
 
+        ofScale(0.15, 0.15, 0.15);
+        
+        camera.begin();
+        ofSetColor(255);
+        //ofSetColor(102, 255, 102);
+        ofEnableLighting();
+        //pointLight.draw();
+        //pointLight2.draw();
+        //pointLight3.draw();
+        pointLight.enable();
+        pointLight2.enable();
+        pointLight3.enable();
+        glLineWidth(0.5);
+        
+        //ofSetColor(102, 255, 102, 55);
+        ofSetColor(255, 255);
+        sphere.drawWireframe();
+        
+        material.begin();
+        
+        //ofSetColor(102, 255, 102, 200);
+        
+        //ofEnableDepthTest();
+        
+        for (int i = 0;i < 39;i++){
+            fuentes[i].setPosition(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]));
+            //ofSetColor(255, 255);
+            //float intensilocal = ofMap(intensidad, 0, 0.06, 0, 255);
+            //ofSetColor(intensilocal, intensilocal, intensilocal);
+            //scale = scale*0.9 + newScale*0.1; // para smoothear?
+            //fuentes[i].setRadius(valorFuente);
+            float radioCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
+            float radioMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
+            float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
+            
+            fuentes[i].draw();
+            
+            fuentes[0].setRadius(radioCrab);
+            fuentes[8].setRadius(radioMkr421);
+            fuentes[6].setRadius(radioMkr501);
+            
+        }
+        
+        float colorCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+        float colorMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+        float colorMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
+        
+        colorLight1 = ofColor(255.f*colorCrab, 113.f*colorCrab, 206.f*colorCrab );
+        colorLight2 = ofColor( 1.f*colorMkr421, 205.f*colorMkr421, 254.f*colorMkr421 );
+        colorLight3 = ofColor(185.f*colorMkr501, 103.f*colorMkr501, 255.f*colorMkr501 );
+        
+        pointLight.setDiffuseColor( colorLight1 );
+        pointLight.setSpecularColor( colorLight1 );
+        pointLight2.setDiffuseColor( colorLight2 );
+        pointLight2.setSpecularColor( colorLight2 );
+        pointLight3.setDiffuseColor( colorLight3 );
+        pointLight3.setSpecularColor( colorLight3 );
+        
+        ofFill();
+        
+        ofSetColor(255, 255, 255, 50);
+        
+        for (int i = 0;i < 500;i++){
+            ofPushMatrix();
+            //ofRotateZ(ofGetElapsedTimef()+10);
+            
+            ofTranslate((ofNoise(i/2.4)-0.5)*600,
+                        (ofNoise(i/5.6)-0.5)*600,
+                        (ofNoise(i/8.2)-0.5)*600);
+            
+            ofSphere(0, 0, (ofNoise(i/3.4)-0.1)*1);
+            ofPopMatrix();
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -494,19 +685,39 @@ void ofApp::keyPressed(int key){
             int numcrab = ofToInt(textAnalisis[1]);
             m.addIntArg(numcrab);
             sender.sendMessage(m, false);
+            string oldpost = "fuente seleccionada: " + textAnalisis[1];
+            post = oldpost + "\n" + post;
         }
         
         if(textAnalisis[0] == "ofmode"){
             ofmode = ofToInt(textAnalisis[1]);
+            if(ofmode == 1){
+                string oldpost = "OpenFrameworks en ventana";
+                post = oldpost + "\n" + post;
+            }
+            ofmode = ofToInt(textAnalisis[1]);
+            if(ofmode == 0){
+                string oldpost = "Fuente externa en ventana";
+                post = oldpost + "\n" + post;
+            }
         }
         
         if(textAnalisis[0] == "orbit"){
             orbitX = ofToInt(textAnalisis[1]);
             orbitY = ofToInt(textAnalisis[2]);
+            string oldpost = "orbitación X="+textAnalisis[1] + " Y="+textAnalisis[2];
+            post = oldpost + "\n" + post;
         }
         
         if(textAnalisis[0] == "centro"){
             centro = 1;
+            string oldpost = "centro de la esfera seleccionado";
+            post = oldpost + "\n" + post;
+        }
+        
+        if(textAnalisis[0] == "h"){
+            string oldpost = "ofhawc, visualizador de posición de 39 fuentes observadas por el observatorio HAWC \nindicaciones: \nfuente + número del 0 al 38 | enfoca fuente \ncentro | selecciona el centro de la esfera \norbit + orbitación en X + orbitación en Y | orbitación de la cámara \nglitch + 1 ó 0 (encendido o apagado) + número del 1 al 10 | inicia glitch \nglitch 0 0 apaga todos los efectos \nofmode + 1 ó 0 (encendido o apagado) | activa o desactiva una fuente externa \ncolaboradores: Emilio Ocelotl, Eric Torres y Marianne Teixido \nrepositorio: https://github.com/EmilioOcelotl/ofhawc \nHAWC: https://www.hawc-observatory.org/";
+            post = oldpost + "\n" + post;
         }
         
         if (textAnalisis[0] == "glitch"){
@@ -521,46 +732,128 @@ void ofApp::keyPressed(int key){
                 slitscan = false;
                 swell = false;
                 invert = false;
+                string oldpost = "todos los efectos desactivados";
+                post = oldpost + "\n" + post;
             }
             
             if(ofToInt(textAnalisis[2]) == 1){
                 convergence = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                string oldpost = "efecto convergence activado";
+                post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto convergence desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 2){
                 glow = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto glow activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto glow desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 3){
                 shaker = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto shaker activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto shaker desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 4){
                 cutslider = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto cutslider activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto cutslider desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 5){
                 twist = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto twist activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto twist desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 6){
                 outline = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto outline activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto outline desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 7){
                 noise = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto noise activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto noise desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 8){
                 slitscan = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto slitscan activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto slitscan desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 9){
                 swell = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto swell activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto swell desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
             
             if(ofToInt(textAnalisis[2]) == 10){
                 invert = ofToBool(textAnalisis[1]);
+                if( ofToBool(textAnalisis[1]) == true){
+                    string oldpost = "efecto invert activado";
+                    post = oldpost + "\n" + post;
+                }
+                if( ofToBool(textAnalisis[1]) == false){
+                    string oldpost = "efecto invert desactivado";
+                    post = oldpost + "\n" + post;
+                }
             }
         }
         
