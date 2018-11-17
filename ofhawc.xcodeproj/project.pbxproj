@@ -1525,70 +1525,6 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
-			<key>C66D20148CF272AFCFBA23BE</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxDomemaster.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxDomemaster/src/ofxDomemaster.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>004268C01954169652041F4C</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>C87594483EEFD64B4CD88978</string>
-					<string>C66D20148CF272AFCFBA23BE</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>src</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>D8F4313FD7C478E115C8AF9C</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>004268C01954169652041F4C</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>ofxDomemaster</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>70DA42C4499ED491102E845F</key>
-			<dict>
-				<key>fileRef</key>
-				<string>C87594483EEFD64B4CD88978</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>C87594483EEFD64B4CD88978</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxDomemaster.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxDomemaster/src/ofxDomemaster.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
 			<key>209AFB107D047F65554FAE1E</key>
 			<dict>
 				<key>fileRef</key>
@@ -1648,7 +1584,6 @@
 			<dict>
 				<key>children</key>
 				<array>
-					<string>D8F4313FD7C478E115C8AF9C</string>
 					<string>E6053AB7FEC63D5F83825B88</string>
 					<string>D92A719EC4DFB00CB4A3047D</string>
 					<string>7F3C04577424427D348B1425</string>
@@ -1807,7 +1742,6 @@
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
-						<string>../../../addons/ofxDomemaster/src</string>
 						<string>../../../addons/ofxOsc/libs</string>
 						<string>../../../addons/ofxOsc/libs/oscpack</string>
 						<string>../../../addons/ofxOsc/libs/oscpack/src</string>
@@ -1884,7 +1818,6 @@
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
-						<string>../../../addons/ofxDomemaster/src</string>
 						<string>../../../addons/ofxOsc/libs</string>
 						<string>../../../addons/ofxOsc/libs/oscpack</string>
 						<string>../../../addons/ofxOsc/libs/oscpack/src</string>
@@ -1961,7 +1894,6 @@
 					<string>E4B69E210A3A1BDC003C02F2</string>
 					<string>0AE5FCAB0F4DAF01D7EE1ED8</string>
 					<string>209AFB107D047F65554FAE1E</string>
-					<string>70DA42C4499ED491102E845F</string>
 					<string>4ADB88E2FB52E76A471065DE</string>
 					<string>5864AD82E20F15536D054EA3</string>
 					<string>72A929D3561B8232A182ABFC</string>
@@ -2068,7 +2000,6 @@
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
-						<string>../../../addons/ofxDomemaster/src</string>
 						<string>../../../addons/ofxOsc/libs</string>
 						<string>../../../addons/ofxOsc/libs/oscpack</string>
 						<string>../../../addons/ofxOsc/libs/oscpack/src</string>
@@ -2136,7 +2067,6 @@
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
-						<string>../../../addons/ofxDomemaster/src</string>
 						<string>../../../addons/ofxOsc/libs</string>
 						<string>../../../addons/ofxOsc/libs/oscpack</string>
 						<string>../../../addons/ofxOsc/libs/oscpack/src</string>

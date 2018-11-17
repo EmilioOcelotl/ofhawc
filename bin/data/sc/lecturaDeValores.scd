@@ -1,3 +1,53 @@
+// Direcciones y puertos a los que envía mensajes OSC
+
+m = NetAddr("127.0.0.1", 5612); // para OpenFrameworks
+n = NetAddr("127.0.0.1", 12000); // para Processing
+
+// Para correr el History.
+
+(
+q = ();
+NetAddr.broadcastFlag = true;
+q.addrs = (0..7).collect { |x|
+		NetAddr("255.255.255.255", 57120 + x)
+};
+q.sendAll = { |q ... args|
+		q.addrs.do { |addr|
+				addr.sendMsg(*args)
+		}; ""
+}
+
+);
+
+(
+
+History.start;
+//History.makeWin;
+
+OSCdef(\hist, { |msg|
+	//msg.postln;
+	History.enter(msg[2].asString, msg[1]);
+}, \hist).fix;
+
+// Este OSCdef envía lo que se declara a of y p
+
+OSCdef(\ofyp, { |msg|
+	n.sendMsg("/message", msg[2].asString, msg[1].asString);
+	m.sendMsg("/message", msg[2].asString, msg[1].asString);
+}, \hist);
+
+
+History.localOff;
+
+History.forwardFunc = { |code|
+	//q.sendAll(\hist, \killall, code);
+	q.sendAll(\hist, \emi, code);
+};
+
+)
+
+// lectura de CSVs. Parece que hay que declararlos uno por uno, en bloque se pachequea
+
 // fuentes juntas
 
 // chico 0.0011980022099968
@@ -51,9 +101,9 @@ s.meter;
 
 // fuentes como un continuo ar kr
 
-~crab = {Demand.kr(Impulse.kr(8), 0, Dseq(b.asFloat*100000000000, inf))};
-~mrk421 = {Demand.kr(Impulse.kr(8), 0, Dseq(d.asFloat*100000000000, inf))};
-~mrk501 = {Demand.kr(Impulse.kr(8), 0, Dseq(f.asFloat*100000000000, inf))};
+//~crab = {Demand.kr(Impulse.kr(16), 0, Dseq(b.asFloat*100000000000, inf))};
+//~mrk421 = {Demand.kr(Impulse.kr(16), 0, Dseq(d.asFloat*100000000000, inf))};
+//~mrk501 = {Demand.kr(Impulse.kr(16), 0, Dseq(f.asFloat*100000000000, inf))};
 
 ~crab = {Lag.kr(Demand.kr(Impulse.kr(8), 0, Dseq(b.asFloat*100000000000, inf)), 0.5)};
 ~mrk421 = {Lag.kr(Demand.kr(Impulse.kr(8), 0, Dseq(d.asFloat*100000000000, inf)), 0.5)};
@@ -65,30 +115,27 @@ s.meter;
 ~mrk421Send = {SendReply.kr(Impulse.kr(30), '/mrk421Send', ~mrk421.kr)};
 ~mrk501Send = {SendReply.kr(Impulse.kr(30), '/mrk501Send', ~mrk501.kr)};
 
-// oscdef
-
-Orb.start("192.168.1.111", 12000); // la dirección de la otra compu. Se necesita la librería PiranhaLab
-Orb.start("127.0.0.1", 5612);
-Orb.start("127.0.0.1", 12000);
-
 (
 
 OSCdef(\crabSend, {|msg|
 	var data = msg[3];
 	//msg[3].postln;
-	Orb.n.sendMsg("/crabSend", data);
+	n.sendMsg("/crabSend", data);
+	m.sendMsg("/crabSend", data);
 }, '/crabSend');
 
 OSCdef(\mrk421Send, {|msg|
 	var data = msg[3];
 	//msg[3].postln;
-	Orb.n.sendMsg("/mrk421Send", data);
+	n.sendMsg("/mrk421Send", data);
+	m.sendMsg("/mrk421Send", data);
 }, '/mrk421Send');
 
 OSCdef(\mrk501Send, {|msg|
 	var data = msg[3];
 	//msg[3].postln;
-	Orb.n.sendMsg("/mrk501Send", data);
+	n.sendMsg("/mrk501Send", data);
+	m.sendMsg("/mrk501Send", data);
 }, '/mrk501Send');
 
 )
@@ -115,6 +162,3 @@ OSCdef(\mrk501Send).free; /// para pararlo
 ~crab.play;
 ~crab2.play;
 ~crab3.play;
-
-SinOsc.ar * [0.5, 0.2, 0.5, 0.2]
-

@@ -1,13 +1,18 @@
 # ofhawc
 
+![ofhawc](bin/data/img/ofhawcImg.png)
+
 ## Introducción
 
-
-Visualizador basado en [OpenFrameworks][1] de los datos de posición y curvas de luz de fuentes observadas. Estos datos fueron recopilados por el [Observatorio de Rayos Gamma HAWC][2] (High-Altitude Water Cherenkov Gamma-Ray Observatory). El proyecto surge a propósito del [Hackatón Astronómico][3] y es parte de un proyecto colaborativo que se complementa con [2HAWC][4] y [sc_hawc][5] y parte del paradigma del [Live Coding][6]
+Visualizador basado en [OpenFrameworks][1] de los datos de posición y curvas de luz de fuentes observadas. Estos datos fueron recopilados por el [Observatorio de Rayos Gamma HAWC][2] (High-Altitude Water Cherenkov Gamma-Ray Observatory). El proyecto surge a propósito del [Hackatón Astronómico][3] y es parte de un proyecto colaborativo que se complementa con [2HAWC][4] y [sc_hawc][5] y parte de la práctica performática del [Live Coding][6].
 
 ## Colaboradorxs
 
-Marianne Teixido, Eric Torres, Rodrigo Treviño. 
+Emilio Ocelotl, Eric Torres, Marianne Teixido. Con el apoyo de Rodrigo Treviño. 
+
+## Ejecución
+
+El proyecto ha sido probado en Linux y Mac. Requiere de ofxPostGlitch y de ofxSyphon (solo Mac). Para el caso de Linux, es necesario eliminar la línea ofxSyphon del archivo addons.make. Por alguna extraña razón, enfocar una fuente no es posible en Linux. 
 
 ## Descripción
 
@@ -36,6 +41,7 @@ El sistema permite "livecodear" los datos en vivo. Gracias a esto es posible ten
 - Representaciones tridimensionales de las fuentes. 
 - Búsqueda del vecino más cercano para determinar las relaciones en el espacio de las fuentes. 
 - Integración con los otros equipos del hackatón astronómico. 
+- Lograr enfocar fuentes en Linux.
 
 [1]: https://openframeworks.cc/
 [2]: https://www.hawc-observatory.org/

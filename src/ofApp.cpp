@@ -13,12 +13,12 @@ void ofApp::setup(){
     ofBackground(0);
     ofSetColor(255);
     ofSetFrameRate(60);
-    ofSetWindowShape(1360, 768); /// La resolución de la pantalla final
+    ofSetWindowShape(1200, 600); /// La resolución de la pantalla final
     ofHideCursor();
     
     // camera
     
-    camera.setDistance(100);
+    camera.setDistance(150);
     prueba = "ofhawc posición y curvas de luz";
     //prueba = "0";
     pruebaInt = 0;
@@ -29,6 +29,11 @@ void ofApp::setup(){
     
     orbitX = 0;
     orbitY = 0;
+    
+    // esferas
+    
+    esferaIn = 0;
+    esferaEx = 0;
     
     // obj
     
@@ -354,7 +359,7 @@ void ofApp::draw(){
     
     myGlitch.generateFx();
 
-    fbo.draw(0,-21);
+    fbo.draw(0,0);
     
     if(centro == 0 ){
     camera.lookAt(nodos[fuenteObservada]);
@@ -382,11 +387,11 @@ void ofApp::draw(){
         ofSetColor(102, 255, 102, 200);
         font.drawString( "ofhawc> " + typing, 20, 190);
         font.drawString( "Posición de la fuente enfocada en coordenadas esféricas", 20, 30);
-        font.drawString( posicionX + posicionY + posicionZ + prueba, 70, 50);
+        font.drawString( posicionX + posicionY + posicionZ + prueba, 20, 50);
         font.drawString("Curvas de Luz", 20, 70);
-        font.drawString("  Crab   Mrk421   Mrk501"+crabo, 50, 160);
+        font.drawString(" Crab    Mrk421   Mrk501"+crabo, 20, 160);
         ofSetColor(255, 70);
-        font.drawString(post, 70, 210);
+        font.drawString(post, 20, 210);
         //font.drawString( "ofhawc> " + typing, 20, 210);
         ofSetColor(255);
     ofNoFill();
@@ -404,22 +409,26 @@ void ofApp::draw(){
         
         ofFill();
         ofSetColor(255.f, 113.f, 206.f);
-        ofCircle(-ofGetWidth()/2+85, -ofGetHeight()/2+110, radioCrab);
+        ofCircle(-ofGetWidth()/2+50, -ofGetHeight()/2+110, radioCrab);
         ofSetColor( 1.f, 205.f, 254.f);
-        ofCircle(-ofGetWidth()/2+175, -ofGetHeight()/2+110, radioMkr421);
+        ofCircle(-ofGetWidth()/2+140, -ofGetHeight()/2+110, radioMkr421);
         ofSetColor(185.f, 103.f, 255.f);
-        ofCircle(-ofGetWidth()/2+265, -ofGetHeight()/2+110, radioMkr501);
+        ofCircle(-ofGetWidth()/2+230, -ofGetHeight()/2+110, radioMkr501);
     }
     
-    ofSetColor(200, 200, 200);
-    ofSetRectMode(OF_RECTMODE_CORNER);
+
     //mapa.draw(ofGetWidth()/2, ofGetHeight()/2, 300, 225);
-    mapa.draw(ofGetWidth()/2-270, -ofGetHeight()/2, 300, 225);
+    if(centro == 0){
+        ofSetColor(200, 200, 200, 150);
+        ofSetRectMode(OF_RECTMODE_CORNER);
+    mapa.draw(ofGetWidth()/2-(270/1.25), -ofGetHeight()/2, 300/1.25, 225/1.25);
+    }
     
+    if(centro == 1){
+        mapa.clear();
+    }
     //ofSetColor(102, 255, 102);
 
-
-    
 }
 
 //--------------------------------------------------------------
@@ -523,9 +532,13 @@ void ofApp::drawScene(){
         }
         
         //ofEnableDepthTest();
+        if(esferaIn == 1){
         sphere2.draw();
-        ofSetColor(255, 255, 255, 200);
+        }
+        if(esferaEx == 1){
+        ofSetColor(255, 255, 255);
         sphere3.drawWireframe();
+        }
         material.end();
         camera.end();
         
@@ -535,10 +548,11 @@ void ofApp::drawScene(){
     ofDisableDepthTest();
     
     ofSetRectMode(OF_RECTMODE_CENTER);
-    ofTranslate(ofGetWidth()-270, ofGetHeight()-260);
+    //ofTranslate(ofGetWidth()-270, ofGetHeight()-260);
     
     if(ofmode == 1){
-        ofTranslate(-40, 90);
+        //ofTranslate(-40, 90);
+        ofTranslate(ofGetWidth()-(client.getWidth()*0.4), ofGetHeight()-(client.getHeight()*0.4));
         miniWin();
     };
     
@@ -549,7 +563,7 @@ void ofApp::drawScene(){
     if(ofmode == 0){
         ofSetRectMode(OF_RECTMODE_CENTER);
         ofSetColor(255);
-        ofTranslate(-410, -100);
+        ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
         client.draw(0, 0);
         ofTranslate(0, 0, 0);
         
@@ -565,89 +579,12 @@ void ofApp::drawScene(){
 void ofApp::miniWin(){ // pendiente dibujar la otra miniwin
  
     if(ofmode == 1){
-        ofScale(0.3, 0.3, 0.3);
+        ofScale(0.4, 0.4, 0.4);
         ofSetRectMode(OF_RECTMODE_CORNER);
         ofSetColor(255);
         client.draw(0, 0);
     };
     
-    if(ofmode == 0){
-        ofSetRectMode(OF_RECTMODE_CENTER);
-
-        ofScale(0.15, 0.15, 0.15);
-        
-        camera.begin();
-        ofSetColor(255);
-        //ofSetColor(102, 255, 102);
-        ofEnableLighting();
-        //pointLight.draw();
-        //pointLight2.draw();
-        //pointLight3.draw();
-        pointLight.enable();
-        pointLight2.enable();
-        pointLight3.enable();
-        glLineWidth(0.5);
-        
-        //ofSetColor(102, 255, 102, 55);
-        ofSetColor(255, 255);
-        sphere.drawWireframe();
-        
-        material.begin();
-        
-        //ofSetColor(102, 255, 102, 200);
-        
-        //ofEnableDepthTest();
-        
-        for (int i = 0;i < 39;i++){
-            fuentes[i].setPosition(ofToFloat(columna[i][6]), ofToFloat(columna[i][7]), ofToFloat(columna[i][8]));
-            //ofSetColor(255, 255);
-            //float intensilocal = ofMap(intensidad, 0, 0.06, 0, 255);
-            //ofSetColor(intensilocal, intensilocal, intensilocal);
-            //scale = scale*0.9 + newScale*0.1; // para smoothear?
-            //fuentes[i].setRadius(valorFuente);
-            float radioCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
-            float radioMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
-            float radioMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 5.0);
-            
-            fuentes[i].draw();
-            
-            fuentes[0].setRadius(radioCrab);
-            fuentes[8].setRadius(radioMkr421);
-            fuentes[6].setRadius(radioMkr501);
-            
-        }
-        
-        float colorCrab = ofMap(intensidadCrab, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-        float colorMkr421 = ofMap(intensidadMkr421, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-        float colorMkr501 = ofMap(intensidadMkr501, 0.0011980022099968, 0.01241282988032, 0.0, 10.0);
-        
-        colorLight1 = ofColor(255.f*colorCrab, 113.f*colorCrab, 206.f*colorCrab );
-        colorLight2 = ofColor( 1.f*colorMkr421, 205.f*colorMkr421, 254.f*colorMkr421 );
-        colorLight3 = ofColor(185.f*colorMkr501, 103.f*colorMkr501, 255.f*colorMkr501 );
-        
-        pointLight.setDiffuseColor( colorLight1 );
-        pointLight.setSpecularColor( colorLight1 );
-        pointLight2.setDiffuseColor( colorLight2 );
-        pointLight2.setSpecularColor( colorLight2 );
-        pointLight3.setDiffuseColor( colorLight3 );
-        pointLight3.setSpecularColor( colorLight3 );
-        
-        ofFill();
-        
-        ofSetColor(255, 255, 255, 50);
-        
-        for (int i = 0;i < 500;i++){
-            ofPushMatrix();
-            //ofRotateZ(ofGetElapsedTimef()+10);
-            
-            ofTranslate((ofNoise(i/2.4)-0.5)*600,
-                        (ofNoise(i/5.6)-0.5)*600,
-                        (ofNoise(i/8.2)-0.5)*600);
-            
-            ofSphere(0, 0, (ofNoise(i/3.4)-0.1)*1);
-            ofPopMatrix();
-        }
-    }
 }
 
 //--------------------------------------------------------------
@@ -669,6 +606,7 @@ void ofApp::keyPressed(int key){
         std::vector < std::string > textAnalisis = ofSplitString(typing, " ");
         
         if(textAnalisis[0] == "fuente" && ofToInt(textAnalisis[1]) < 39){
+            std::vector < std::string > filas = ofSplitString(buffer.getText(), " ");
             centro = 0;
             int mapps = ofToInt(textAnalisis[1]) + 1;
             mapa.load("maps/"+ ofToString(mapps)+".png");
@@ -676,7 +614,7 @@ void ofApp::keyPressed(int key){
             prueba = ofToString(textAnalisis[1]);
             int paso2 = ofToInt(textAnalisis[1]) * 3;
             fuenteObservada = ofToInt(textAnalisis[1]);
-            //fuenteNombre = ofToString(filas[1]) + " " + ofToString(filas[2]); // +3 para imprimir los valores de las fuentes. Empieza en 1, 0 es header.
+            fuenteNombre = ofToString(filas[paso2+1]) + " " + ofToString(filas[paso2+2]); // +3 para imprimir los valores de las fuentes. Empieza en 1, 0 es header.
             posicionX = "Nombre="+fuenteNombre + " l=" + ofToString(columna[ofToInt(prueba)][1]);
             posicionY = " b=" + ofToString(columna[ofToInt(prueba)][2]) + " RA=" + ofToString(columna[ofToInt(prueba)][3]) + " Dec=" + ofToString(columna[ofToInt(prueba)][4]);
             mapa.load("maps/"+ofToString(ofToInt(textAnalisis[1])+1)+".png");
@@ -686,6 +624,12 @@ void ofApp::keyPressed(int key){
             m.addIntArg(numcrab);
             sender.sendMessage(m, false);
             string oldpost = "fuente seleccionada: " + textAnalisis[1];
+            post = oldpost + "\n" + post;
+        }
+        
+        if(textAnalisis[0] == "distancia"){
+            camera.setDistance(ofToFloat(textAnalisis[1]));
+            string oldpost = "distancia: " + ofToString(textAnalisis[1]);
             post = oldpost + "\n" + post;
         }
         
@@ -713,10 +657,20 @@ void ofApp::keyPressed(int key){
             centro = 1;
             string oldpost = "centro de la esfera seleccionado";
             post = oldpost + "\n" + post;
+            posicionX = "";
+            posicionY = "";
+        }
+        
+        if(textAnalisis[0] == "esferain"){
+            esferaIn = ofToInt(textAnalisis[1]);
+        }
+        
+        if(textAnalisis[0] == "esferaex"){
+            esferaEx = ofToInt(textAnalisis[1]);
         }
         
         if(textAnalisis[0] == "h"){
-            string oldpost = "ofhawc, visualizador de posición de 39 fuentes observadas por el observatorio HAWC \nindicaciones: \nfuente + número del 0 al 38 | enfoca fuente \ncentro | selecciona el centro de la esfera \norbit + orbitación en X + orbitación en Y | orbitación de la cámara \nglitch + 1 ó 0 (encendido o apagado) + número del 1 al 10 | inicia glitch \nglitch 0 0 apaga todos los efectos \nofmode + 1 ó 0 (encendido o apagado) | activa o desactiva una fuente externa \ncolaboradores: Emilio Ocelotl, Eric Torres y Marianne Teixido \nrepositorio: https://github.com/EmilioOcelotl/ofhawc \nHAWC: https://www.hawc-observatory.org/";
+            string oldpost = "ofhawc, visualizador de posición de 39 fuentes observadas por el observatorio HAWC \nfuente + número del 0 al 38 | enfoca fuente \ncentro | selecciona el centro de la esfera \norbit + orbitación en X + orbitación en Y | orbitación de la cámara \nglitch + 1 ó 0 (encendido o apagado) + número del 1 al 10 | inicia glitch \nglitch + 0 + 0 | apaga todos los efectos \nofmode + 1 ó 0 (encendido o apagado) | activa o desactiva una fuente externa \ndistancia + número | aleja o acerca la cámara \nesferain + 1 ó 0 | dibuja una esfera interna \nesferaex + 1 ó 0 | dibuja una esfera externa \ncolaboradores: Emilio Ocelotl, Eric Torres y Marianne Teixido \nrepositorio: https://github.com/EmilioOcelotl/ofhawc \nHAWC: https://www.hawc-observatory.org/";
             post = oldpost + "\n" + post;
         }
         

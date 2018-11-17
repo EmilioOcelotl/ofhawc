@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxDomemaster.h"
 #include "ofxPostGlitch.h"
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
@@ -33,7 +32,6 @@ public:
     void drawScene();
     void miniWin();
 
-    ofxDomemaster domemaster;
     ofTrueTypeFont font;
     //ofTrueTypeFont fontobj[LIM];
     string text;
@@ -59,7 +57,9 @@ public:
     ofImage mapa;
     int orbitX;
     int orbitY;
-    int fuenteObservada; 
+    int fuenteObservada;
+    int esferaIn;
+    int esferaEx;
     
 #if (defined(__APPLE__) && defined(__MACH__))
     ofxSyphonClient client;
@@ -79,7 +79,7 @@ public:
     ofColor colorLight3;
     float radius;
     ofVec3f center;
-    int centro; 
+    int centro;
     
     // color
     
