@@ -13,7 +13,7 @@ void ofApp::setup(){
     ofBackground(0);
     ofSetColor(255);
     ofSetFrameRate(60);
-    ofSetWindowShape(1200, 600); /// La resolución de la pantalla final
+    ofSetWindowShape(1000, 600); /// La resolución de la pantalla final
     ofHideCursor();
     
     // camera
@@ -116,6 +116,8 @@ void ofApp::setup(){
     material.setShininess( 120 );
     material.setSpecularColor(ofColor(255, 255, 255, 255));
     
+    shMaterial.setEmissiveColor(ofColor(255, 255, 255, 255));
+
     // datos //
     
     // posiciones
@@ -375,12 +377,12 @@ void ofApp::draw(){
     if(ofmode == 0){
         ofSetColor(102, 255, 102, 200);
         font.drawString( "ofhawc> " + typing, 20, 30);
-
     }
     
     if(ofmode == 1){
         
         ofTranslate(0, 0, 0);
+        
 
         ofSetRectMode(OF_RECTMODE_CORNER);
         ofSetColor(255);
@@ -389,11 +391,13 @@ void ofApp::draw(){
         font.drawString( "Posición de la fuente enfocada en coordenadas esféricas", 20, 30);
         font.drawString( posicionX + posicionY + posicionZ + prueba, 20, 50);
         font.drawString("Curvas de Luz", 20, 70);
-        font.drawString(" Crab    Mrk421   Mrk501"+crabo, 20, 160);
-        ofSetColor(255, 70);
+        font.drawString("  Crab      Mrk421      Mrk501"+crabo, 20, 160);
+        ofSetColor(255, 150);
         font.drawString(post, 20, 210);
         //font.drawString( "ofhawc> " + typing, 20, 210);
         ofSetColor(255);
+        
+        
     ofNoFill();
         
         ofColor(255);
@@ -409,11 +413,11 @@ void ofApp::draw(){
         
         ofFill();
         ofSetColor(255.f, 113.f, 206.f);
-        ofCircle(-ofGetWidth()/2+50, -ofGetHeight()/2+110, radioCrab);
+        ofCircle(-ofGetWidth()/2+60, -ofGetHeight()/2+110, radioCrab);
         ofSetColor( 1.f, 205.f, 254.f);
-        ofCircle(-ofGetWidth()/2+140, -ofGetHeight()/2+110, radioMkr421);
+        ofCircle(-ofGetWidth()/2+170, -ofGetHeight()/2+110, radioMkr421);
         ofSetColor(185.f, 103.f, 255.f);
-        ofCircle(-ofGetWidth()/2+230, -ofGetHeight()/2+110, radioMkr501);
+        ofCircle(-ofGetWidth()/2+290, -ofGetHeight()/2+110, radioMkr501);
     }
     
 
@@ -469,10 +473,11 @@ void ofApp::drawScene(){
         pointLight.enable();
         pointLight2.enable();
         pointLight3.enable();
-        glLineWidth(0.5);
+        glLineWidth(2);
         
         //ofSetColor(102, 255, 102, 55);
         ofSetColor(255, 255);
+        
         sphere.drawWireframe();
         
         material.begin();
@@ -527,7 +532,7 @@ void ofApp::drawScene(){
                         (ofNoise(i/5.6)-0.5)*600,
                         (ofNoise(i/8.2)-0.5)*600);
             
-            ofSphere(0, 0, (ofNoise(i/3.4)-0.1)*0.5);
+            ofSphere(0, 0, (ofNoise(i/3.4)-0.1)*0.75);
             ofPopMatrix();
         }
         

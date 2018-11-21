@@ -12,7 +12,9 @@ Emilio Ocelotl, Eric Torres, Marianne Teixido. Con el apoyo de Rodrigo Treviño.
 
 ## Ejecución
 
-El proyecto ha sido probado en Linux y Mac. Requiere de ofxPostGlitch y de ofxSyphon (solo Mac). Para el caso de Linux, es necesario eliminar la línea ofxSyphon del archivo addons.make. Por alguna extraña razón, enfocar una fuente no es posible en Linux. 
+El proyecto ha sido probado en Linux (OF 0.10.0) y Mac (OF 0.9.8). Requiere de ofxPostGlitch y de ofxSyphon (solo Mac). Para el caso de Linux, es necesario eliminar la línea ofxSyphon del archivo addons.make. Por alguna extraña razón, enfocar una fuente no es posible en Linux. 
+
+En la carpeta bin/data/ es posible encontrar los archivos complementarios al proyecto de OpenFrameworks. En la carpeta csv es posible encontrar los datos que el proyecto recupera. En la carpeta sc están los archivos de SuperCollider que son necesarios para enviar la secuencia de las curvas de luz y el extracto de texto que envía lo declarado en SuperCollider a OpenFrameworks a través de History. 
 
 ## Descripción
 
@@ -26,7 +28,7 @@ Este proyecto se inspira parcialmente en [Orbit][8], una plataforma para realiza
 
 ## Conclusiones
 
-El mayor reto al visualizar/sonorizar datos tiene que ver con la representación de un fenómeno en escalas humanamente perceptibles. Si tomamos en cuenta esta situación, interfaces de visualización/sonorización como ofhawc funcionan como una especie de prótesis que nos ayuda a tener una aproximación en escala humana a la emisión de rayos gama.
+El mayor reto al visualizar/sonorizar datos tiene que ver con la representación de un fenómeno en escalas humanamente perceptibles. Si tomamos en cuenta esta situación, interfaces de visualización/sonorización como ofhawc funcionan como una especie de prótesis que nos ayuda a tener una aproximación en escala humana a la emisión de rayos gamma.
 
 Es importante señalar que esta aproximación está mediada por decisiones relacionadas con la experiencia de los involucrados en el desarrollo e implementación del proyecto. La aproximación al fenómeno se ve en cierta medida distorsionada por estas decisiones. Otro de los retos a los que nos enfrentamos fue encontrar una mediación entre las decisiones estéticas y la utilización estricta de los datos.
 
@@ -42,6 +44,7 @@ El sistema permite "livecodear" los datos en vivo. Gracias a esto es posible ten
 - Búsqueda del vecino más cercano para determinar las relaciones en el espacio de las fuentes. 
 - Integración con los otros equipos del hackatón astronómico. 
 - Lograr enfocar fuentes en Linux.
+- Un modo dedicado a las curvas de luz. Revisar [Canon Generator][11]. 
 
 [1]: https://openframeworks.cc/
 [2]: https://www.hawc-observatory.org/
@@ -53,3 +56,4 @@ El sistema permite "livecodear" los datos en vivo. Gracias a esto es posible ten
 [8]: https://github.com/EmilioOcelotl/Orbit
 [9]: https://toplap.org/about/
 [10]: http://doc.sccode.org/Overviews/JITLib.html
+[11]: https://github.com/nanc-in-a-can/canon-generator

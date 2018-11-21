@@ -41,6 +41,7 @@ public:
     ofxOscSender sender;
     ofEasyCam camera;
     ofMaterial material;
+    ofMaterial shMaterial;
     ofxXmlSettings XML;
     ofBuffer buffer;
     ofBuffer curvaDeLuz1;
